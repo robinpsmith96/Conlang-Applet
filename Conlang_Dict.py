@@ -48,6 +48,7 @@ if __name__ == "__main__":
                 lengt = diction.shape[0]
                 diction = pd.concat([diction, pd.DataFrame(newLine, index=[str(lengt + 1)])])
                 diction.to_json('Diction.json')
+            st.download_button('Download Full Dictionary', diction.to_json(), file_name='Diction.json')
         with col1:
             if search != None:
                 diction = diction[diction['English'].str.contains(search) | diction['Conlang'].str.contains(search)]
