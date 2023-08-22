@@ -43,11 +43,18 @@ if __name__ == "__main__":
                 con = st.text_input(label='Conlang Word:')
                 submitted = st.form_submit_button('Submit')
             if submitted:
-                newLine = {'English': eng, 'Conlang': con}
-                diction = pd.read_json('Diction.json')
-                lengt = diction.shape[0]
-                diction = pd.concat([diction, pd.DataFrame(newLine, index=[str(lengt + 1)])])
-                diction.to_json('Diction.json')
+                if eng not in diction['English'].unique() and con not in diction['Conlang'].unique():
+                    newLine = {'English': eng, 'Conlang': con}
+                    diction = pd.read_json('Diction.json')
+                    lengt = diction.shape[0]
+                    diction = pd.concat([diction, pd.DataFrame(newLine, index=[str(lengt + 1)])])
+                    diction.to_json('Diction.json')
+                elif eng in diction['English'].unique() and con not in diction['Conlang'].unique():
+                    st.error('English word already exists!')
+                elif eng not in diction['English'].unique() and con in diction['Conlang'].unique():
+                    st.error('Conlang word already exists!')
+                else:
+                    st.error('Entry already exists!')
             st.download_button('Download Full Dictionary', diction.to_json(), file_name='Diction.json')
         with col1:
             if search != None:
